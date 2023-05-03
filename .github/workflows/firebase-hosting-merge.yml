@@ -2,10 +2,12 @@
 # https://github.com/firebase/firebase-tools
 
 name: Deploy to Firebase Hosting on merge
-'on':
+
+on:
   push:
     branches:
       - main
+
 jobs:
   build_and_deploy:
     runs-on: ubuntu-latest
@@ -14,13 +16,13 @@ jobs:
       - uses: actions/setup-node@v2
         with:
           node-version: '16.x'
-      env:
-        VUE_APP_API_KEY: "${{ env.VUE_APP_API_KEY }}"
-        VUE_APP_AUTH_DOMAIN: "${{ env.VUE_APP_AUTH_DOMAIN }}"
-        VUE_APP_PROJECT_ID: "${{ env.VUE_APP_PROJECT_ID }}"
-        VUE_APP_STORAGE_BUCKET: "${{ env.VUE_APP_STORAGE_BUCKET }}"
-        VUE_APP_MESSAGING_SENDER_ID: "${{ env.VUE_APP_MESSAGING_SENDER_ID }}"
-        VUE_APP_APP_ID: "${{ env.VUE_APP_APP_ID }}"
+      - env:
+          VUE_APP_API_KEY: "${{ env.VUE_APP_API_KEY }}"
+          VUE_APP_AUTH_DOMAIN: "${{ env.VUE_APP_AUTH_DOMAIN }}"
+          VUE_APP_PROJECT_ID: "${{ env.VUE_APP_PROJECT_ID }}"
+          VUE_APP_STORAGE_BUCKET: "${{ env.VUE_APP_STORAGE_BUCKET }}"
+          VUE_APP_MESSAGING_SENDER_ID: "${{ env.VUE_APP_MESSAGING_SENDER_ID }}"
+          VUE_APP_APP_ID: "${{ env.VUE_APP_APP_ID }}"
       - run: yarn && yarn build
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
