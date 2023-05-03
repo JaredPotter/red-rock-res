@@ -35,3 +35,5 @@ jobs:
           firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_RED_ROCK_RES }}'
           channelId: live
           projectId: red-rock-res
+          run: | 
+            echo "Deploying to Firebase Hosting" 
