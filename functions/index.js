@@ -1,6 +1,10 @@
 const functions = require("firebase-functions");
 const puppeteer = require('puppeteer');
+const admin = require('firebase-admin');
+
 require('dotenv').config();
+
+admin.initializeApp();
 
 const isDev = process.argv[2];
 
@@ -165,14 +169,43 @@ async function sleep(ms) {
   })
 }
 
-exports.reserveRedRockTimedEntryPass = functions.https.onRequest(async (res, req) => {
-    const browser = await puppeteer.launch({ headless: headless});
+exports.redRockTimeEntryPassAvailability = functions.https.onRequest((req, res) => {
+  res.send('Hello, World!');
+});
+
+exports.reserveRedRockTimedEntryPass = functions.https.onRequest(async (req, res) => {
+    if(req.method !== 'POST') {
+      res.status(405).send('Method Not Allowed');
+    }
+
+    const token = req.headers.authorization;
+    
+    try {
+      await admin.auth().verifyIdToken(token)
+    } catch (error) {
+      res.status(401).send('Unauthorized');
+      return;
+    }
+
+    const body = req.body;
+
+    if(!body.date) {
+      res.status(422).send('date body parameter is required and must be in the MM/DD/YYYY format. ex. 05/04/2023');
+      return;
+    }
+
+    if(!body.time) {
+      res.status(422).send('time body parameter is required and must be in the HH00 24-hour format. ex. 0800');
+      return;
+    }
+
+    const browser = await puppeteer.launch({ headless: false});
     
     const page = await browser.newPage();
     await loginToRecreationGov(page, RECREATION_GOV_EMAIL, RECREATION_GOV_PASSWORD);
 
-    const date = '05/04/2023';
-    const time = '0800';
+    const date = body.date;
+    const time = body.time;
 
     const reservation = await reserveRedRockTimedEntryPass(
       page,

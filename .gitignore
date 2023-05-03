@@ -21,3 +21,8 @@ pnpm-debug.log*
 *.njsproj
 *.sln
 *.sw?
+
+.env
+
+firebase-debug.log
+ui-debug.log
