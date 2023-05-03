@@ -6,6 +6,10 @@ name: Deploy to Firebase Hosting on merge
   push:
     branches:
       - main
+name: Use Node.js 17.x
+  uses: actions/setup-node@v2
+  with:
+    node-version: 17.x
 jobs:
   build_and_deploy:
     runs-on: ubuntu-latest
