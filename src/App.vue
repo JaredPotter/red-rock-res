@@ -143,13 +143,19 @@ export default {
 
       return timeslots;
     },
-    handleReserveTimeslotClick(timeslot) {
+    async handleReserveTimeslotClick(timeslot) {
       const isConfirmed = window.confirm(`Confirm ${timeslot.date} at ${timeslot.title}?`);
 
       if(isConfirmed) {
-        // TODO: call API with user credentials / token
-        // eslint-disable-next-line no-debugger
-        debugger;
+
+        try {
+          const apiUrl = `${process.env.VUE_APP_API_KEY}`;
+          const resposne = await axios.post(apiUrl);
+
+          alert(JSON.stringify(resposne.data));
+        } catch (error) {
+          alert(error);
+        }
       }
     }
   }
